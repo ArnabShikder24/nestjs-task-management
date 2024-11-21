@@ -1,11 +1,17 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { Task } from './task.Entity';
 import { TasksService } from './tasks.service';
+import { CreateTaskDto } from './dto/create-task.dto';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private tasksService: TasksService) { }
   
+  @Get()
+  getAllTasks(): Promise<Task[]> {
+    return this.tasksService.GetAllTasks();
+  }
+
   // @Get()
   // getAllTasks(@Query() filterDto: GetTaskFilterDto): Task[] {
   //   if (Object.keys(filterDto).length) {
@@ -19,10 +25,10 @@ export class TasksController {
     return this.tasksService.getTaskById(id);
   }
 
-  // @Post()
-  // createTask(@Body() createTaskDto: CreateTaskDto): Task {
-  //   return this.tasksService.createTask(createTaskDto);
-  // }
+  @Post()
+  createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
+    return this.tasksService.createTask(createTaskDto);
+  }
 
   // @Delete("/:id")
   // deleteTask(@Param("id") id: string): string {

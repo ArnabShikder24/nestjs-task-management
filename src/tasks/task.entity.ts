@@ -10,5 +10,5 @@ export class Task {
   @Column()
   description: string
   @Column({ type: 'enum', enum: TaskStatus })
-  satus: TaskStatus
+  status: TaskStatus
 }
