@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskStatus } from './tasks-status.enum';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
+import { GetTaskFilterDto } from './dto/get-task-filter.dto';
 
 @Injectable()
 export class TasksService {
@@ -13,31 +14,24 @@ export class TasksService {
     private tasksRepository: Repository<Task>,
   ) { }
   
-  async GetAllTasks(): Promise<Task[]> {
-    return this.tasksRepository.find();
+  async GetAllTasks(filterDto: GetTaskFilterDto): Promise<Task[]> {
+    const { status, search } = filterDto;
+    const query = await this.tasksRepository.createQueryBuilder('task');
+
+    if (status) {
+      query.andWhere('task.status = :status', { status });
+    }
+
+    if (search) {
+      query.andWhere(
+        'LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search)',
+        { search: `%${search}%` }
+      )
+    }
+
+    const tasks = await query.getMany()
+    return tasks;
   }
-
-  // getTaskWithFilters(filterDto: GetTaskFilterDto): Array<Task>{
-  //   const { status, search } = filterDto;
-
-  //   let tasks = this.tasks;
-
-  //   if (status) {
-  //     tasks = tasks.filter((task) => task.status === status);
-  //   }
-
-  //   if (search) {
-  //     tasks = tasks.filter((task) => {
-  //       if (task.title.includes(search) || task.description.includes(search)) {
-  //         return true;
-  //       }
-
-  //       return false;
-  //     })
-  //   }
-
-  //   return tasks;
-  // }
 
   async getTaskById(id: string): Promise<Task> {
     const found = await this.tasksRepository.findOne({
