@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AuthCredentialDto } from './dto/user-credential.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './jwt-payload-interface';
+import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
