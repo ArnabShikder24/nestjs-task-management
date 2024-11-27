@@ -14,8 +14,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       secretOrKey: "testSecret52",
-      jwtFormRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    })
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    });
   };
 
   async validate(payload: JwtPayload): Promise<User> {
