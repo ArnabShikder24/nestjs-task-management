@@ -7,7 +7,7 @@ export class AuthCredentialDto {
   username: string;
   @IsString()
   @MinLength(6)
-  @MaxLength(32)
+  @MaxLength(100)
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: "it should be One Uppercase One Lower case one numbe and one special Char",
   })
