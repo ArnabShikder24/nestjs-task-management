@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Logger, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Logger,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { Task } from './task.Entity';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -11,9 +22,9 @@ import { User } from 'src/auth/user.entity';
 @Controller('tasks')
 @UseGuards(AuthGuard())
 export class TasksController {
-  private logger = new Logger("TaskController");
-  constructor(private tasksService: TasksService) { }
-  
+  private logger = new Logger('TaskController');
+  constructor(private tasksService: TasksService) {}
+
   @Get()
   getAllTasks(
     @Query() filterDto: GetTaskFilterDto,
@@ -23,11 +34,8 @@ export class TasksController {
     return this.tasksService.GetAllTasks(filterDto, user);
   }
 
-  @Get("/:id")
-  getTaskById(
-    @Param("id") id: string,
-    @GetUser() user: User,
-  ): Promise<Task> {
+  @Get('/:id')
+  getTaskById(@Param('id') id: string, @GetUser() user: User): Promise<Task> {
     return this.tasksService.getTaskById(id, user);
   }
 
@@ -36,20 +44,18 @@ export class TasksController {
     @Body() createTaskDto: CreateTaskDto,
     @GetUser() user: User,
   ): Promise<Task> {
+    this.logger.verbose(`User "${user.username}" retrieving all tasks`);
     return this.tasksService.createTask(createTaskDto, user);
   }
 
-  @Delete("/:id")
-  deleteTask(
-    @Param("id") id: string,
-    @GetUser() user: User,
-  ): Promise<string> {
-    return this.tasksService.deleteTask(id, user); 
+  @Delete('/:id')
+  deleteTask(@Param('id') id: string, @GetUser() user: User): Promise<string> {
+    return this.tasksService.deleteTask(id, user);
   }
 
-  @Patch("/:id/status")
+  @Patch('/:id/status')
   updateTaskStatus(
-    @Param("id") id: string,
+    @Param('id') id: string,
     @Body() updateTaskStatusDto: UpdateTaskStatusDto,
     @GetUser() user: User,
   ): Promise<Task> {
